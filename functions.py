@@ -178,14 +178,14 @@ def eo_job_catologue():
     maintanance_job_list_general_df = maintanance_job_list_general_func()
     strategy_list = list(set( maintanance_job_list_general_df['strategy_id']))
     maintanance_job_list_general_df.rename(columns={'upper_level_tehmesto_code': 'level_upper'}, inplace=True)
-    full_eo_list = full_eo_list_actual_func()
+    full_eo_list = full_eo_list_func()
     full_eo_list['strategy_id'] = full_eo_list['strategy_id'].astype(int)
     maintanance_job_list_general_df['strategy_id'] = maintanance_job_list_general_df['strategy_id'].astype(int)
     
     full_eo_list = full_eo_list.loc[full_eo_list['strategy_id'].isin(strategy_list)]
     eo_maintanance_plan_df = pd.merge(full_eo_list, maintanance_job_list_general_df, on='strategy_id', how='inner')
 
-    eo_maintanance_plan_df.to_csv('data/eo_maintanance_plan_df_delete.csv')
+    # eo_maintanance_plan_df.to_csv('data/eo_maintanance_plan_df_delete.csv')
 
     # удаляем строки, в которых нет данных в колонке eo_main_class_code
     eo_maintanance_plan_df = eo_maintanance_plan_df.loc[eo_maintanance_plan_df['eo_main_class_code'] != 'no_data']
@@ -204,7 +204,7 @@ def eo_job_catologue():
                               'interval_motohours', 'downtime_planned', 'man_hours', 'pass_interval', 'go_interval',
                               'operation_start_date', 'operation_finish_date']].reset_index(drop=True)
     eo_job_catologue = eo_maintanance_plan_df
-
+    print(eo_maintanance_plan_df.info())
     eo_job_catologue.to_csv('data/eo_job_catologue.csv', index=False)
   
 

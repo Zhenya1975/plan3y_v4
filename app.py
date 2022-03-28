@@ -13,9 +13,9 @@ import func_maintanance_jobs_df_prepare
 import func_ktg_data_prep
 
 
-import widget_fig_piechart_downtime_2023
-import widget_fig_piechart_downtime_2024
-import widget_fig_piechart_downtime_2025
+# import widget_fig_piechart_downtime_2023
+# import widget_fig_piechart_downtime_2024
+# import widget_fig_piechart_downtime_2025
 import ktg_table_html
 import p11_table_html
 import func_be_select_data_prep
@@ -205,7 +205,7 @@ def maintanance(theme_selector, checklist_be, checklist_model_eo):
  
   # если фильтр не трогали и его значение равно None, то вытаскиваем значение из сохраненного фильтра
   be_full_list = func_be_select_data_prep.be_select_data_prep()[2]
-
+  
   
   if checklist_be == None:
     checklist_be_value = saved_filters_dict['filter_be']
@@ -213,7 +213,7 @@ def maintanance(theme_selector, checklist_be, checklist_model_eo):
       be_list_for_dataframes_filtering = be_full_list
     else:
       be_list_for_dataframes_filtering = checklist_be_value
-
+  
   # если в фильтре что-то есть и он не пустой то берем значение из фильтра и переписываем json
   elif checklist_be != None and len(checklist_be) != 0:
     be_list_for_dataframes_filtering = checklist_be
@@ -271,7 +271,7 @@ def maintanance(theme_selector, checklist_be, checklist_model_eo):
     checklist_model_eo_value = checklist_model_eo
   ##########################################################################  
   checklist_model_eo = func_model_eo_select_data_prep.model_eo_select_data_prep(be_list_for_dataframes_filtering)[0]
-
+  
   ################# КОНЕЦ ОБРАБОТЧИКОВ ФИЛЬТРОВ #################################################
   
   
@@ -279,7 +279,7 @@ def maintanance(theme_selector, checklist_be, checklist_model_eo):
   total_qty_EO_2023 = functions.total_qty_EO(be_list_for_dataframes_filtering, model_eo_filter_list_for_dataframes_filtering)[0]
   total_qty_EO_2024 = functions.total_qty_EO(be_list_for_dataframes_filtering, model_eo_filter_list_for_dataframes_filtering)[1]
   total_qty_EO_2025 = functions.total_qty_EO(be_list_for_dataframes_filtering, model_eo_filter_list_for_dataframes_filtering)[2]
-  
+
   eo_qty_2023_card_text = 'Кол-во ЕО в выборке: {}'.format(total_qty_EO_2023)
   eo_qty_2024_card_text = 'Кол-во ЕО в выборке: {}'.format(total_qty_EO_2024)
   eo_qty_2025_card_text = 'Кол-во ЕО в выборке: {}'.format(total_qty_EO_2025)
@@ -289,7 +289,7 @@ def maintanance(theme_selector, checklist_be, checklist_model_eo):
   # ktg_2023_text = widgets.widgets_data(theme_selector, be_list_for_dataframes_filtering)[3]
   ktg_2023_text =  func_update_downtime_graph_data.update_downtime_graph_data(be_list_for_dataframes_filtering, model_eo_filter_list_for_dataframes_filtering)[0]
   ktg_2023_card_text = 'КТГ по году: {}'.format(ktg_2023_text)
-
+  # print("ktg_2023_card_text", ktg_2023_card_text)
   
   #ktg_2024_text = widgets.widgets_data(theme_selector, be_list_for_dataframes_filtering)[4]
   ktg_2024_text =  func_update_downtime_graph_data.update_downtime_graph_data(be_list_for_dataframes_filtering, model_eo_filter_list_for_dataframes_filtering)[1]
@@ -318,7 +318,7 @@ def maintanance(theme_selector, checklist_be, checklist_model_eo):
   fig_man_hours = func_man_hours_data_prep.man_hours_data_pre(theme_selector, be_list_for_dataframes_filtering, model_eo_filter_list_for_dataframes_filtering)
   new_loading_style = loading_style
 
-  
+
   return checklist_be_value, checklist_be_options, checklist_model_eo_value, checklist_model_eo, eo_qty_2023_card_text,eo_qty_2024_card_text, eo_qty_2025_card_text, ktg_2023_card_text, ktg_2024_card_text, ktg_2025_card_text, fig_downtime, fig_ktg, ktg_by_month_table, p11_table, fig_man_hours, new_loading_style
 
 
