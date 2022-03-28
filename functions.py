@@ -204,7 +204,7 @@ def eo_job_catologue():
                               'interval_motohours', 'downtime_planned', 'man_hours', 'pass_interval', 'go_interval',
                               'operation_start_date', 'operation_finish_date']].reset_index(drop=True)
     eo_job_catologue = eo_maintanance_plan_df
-    print(eo_maintanance_plan_df.info())
+
     eo_job_catologue.to_csv('data/eo_job_catologue.csv', index=False)
   
 

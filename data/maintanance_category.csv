@@ -1,0 +1,31 @@
+maintanance_category_id,maintanance_name
+eto,ЕТО
+to500,ТО-500
+to1000,ТО-1000
+to2000,ТО-2000
+to4000,ТО-4000
+to6000,ТО-6000
+to12000,ТО-12000
+to_suppl_systems,ТО доп систем
+tr,ТР
+tr_suppl_systems,Трдоп.сист.
+tr_middle,Трсред
+overhaul_total,КР
+tyre_repl,Замена колес (6 шт)
+to250,ТО1-250
+to1500,ТО4-1500
+to2500,ТО6-2500
+to5000,ТО8-5000
+to8000,ТО9-8000
+to10000,ТО10-10000
+tr1,ТР
+tr2,ТР
+tr3,ТР
+tr4,ТР
+eng_repl,Кдвс (Замена)
+gen_overhaul,Кген(Замена)
+kmk_overhaul,Кмк (Замена)
+tr_mo,ТРмо (Замена)
+tr_susp,ТР Подвески
+lining_partitial,СВч (частичная футеровка)
+lining_full,СВп (полная футеровка)

@@ -116,7 +116,7 @@ def ktg_data_prep():
     # заполняем пустые ячейки нулями
     hour_df.fillna(0, inplace=True)
     # print(hour_df.columns)
-    hour_df.to_csv('data/hour_df_temp_delete.csv')  
+    # hour_df.to_csv('data/hour_df_temp_delete.csv')  
     job_list = list(pd.read_csv('data/job_list.csv')['maintanance_category_id'])
     # hour_df.to_csv('data/hour_df_delete.csv')
 
