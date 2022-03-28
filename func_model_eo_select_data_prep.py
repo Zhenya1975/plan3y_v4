@@ -23,6 +23,8 @@ def model_eo_select_data_prep(be_filter):
     dict_temp['value'] = eo_model_id
     model_eo_filter_checklist_data.append(dict_temp)
     model_eo_filter_values.append(eo_model_id)
+    
+  # print("model_eo_filter_values", model_eo_filter_values)
   return model_eo_filter_checklist_data, model_eo_filter_values
 
-
+# model_eo_select_data_prep(['first11'])

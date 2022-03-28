@@ -240,17 +240,19 @@ def maintanance(theme_selector, checklist_be, checklist_model_eo):
   """все возможные значения в фильтре моделей ео"""
    
   # записываем в model_eo_value то, что лежит в фильтре
-
+  
   if checklist_model_eo == None:
+    model_eo_filter_list_for_dataframes_filtering = model_eo_filter_full_list
     checklist_model_eo_value = saved_filters_dict['filter_model_eo']
     # если фильтр не трогали и его значение равно None, то вытаскиваем значение из сохраненного в json
     # если из json пришел пустой лист, то в переменную для фильтрации отдаем полный список 
+    
     if len(saved_filters_dict['filter_model_eo']) == 0:
       model_eo_filter_list_for_dataframes_filtering = model_eo_filter_full_list
     # если из json пришел не пустой лист, то в переменную для фильтрации отдаем значение из json
     else:
-      model_eo_filter_list_for_dataframes_filtering = checklist_model_eo
-
+      model_eo_filter_list_for_dataframes_filtering = saved_filters_dict['filter_model_eo']
+    
   # если в фильтре что-то есть и он не пустой то берем значение из фильтра и переписываем json
   elif checklist_model_eo != None and len(checklist_model_eo) != 0:
     model_eo_filter_list_for_dataframes_filtering = checklist_model_eo
@@ -273,7 +275,6 @@ def maintanance(theme_selector, checklist_be, checklist_model_eo):
   checklist_model_eo = func_model_eo_select_data_prep.model_eo_select_data_prep(be_list_for_dataframes_filtering)[0]
   
   ################# КОНЕЦ ОБРАБОТЧИКОВ ФИЛЬТРОВ #################################################
-  
   
 
   total_qty_EO_2023 = functions.total_qty_EO(be_list_for_dataframes_filtering, model_eo_filter_list_for_dataframes_filtering)[0]
