@@ -296,17 +296,12 @@ def maintanance_jobs_df_prepare(calculation_start_mode):
       # календарный интервал между формами = кол-во суток х 24 + остаток
       calendar_interval_between_maint = number_of_days_to_next_maint * 24 + remaining_hours
 
-      
-      
       maintanance_start_datetime = maintanance_start_datetime + timedelta(hours=calendar_interval_between_maint) + timedelta(hours=downtime_planned)
       temp_dict['maintanance_start_datetime'] = maintanance_start_datetime
       maintanance_finish_datetime = maintanance_start_datetime + timedelta(hours=downtime_planned)
       temp_dict['maintanance_finish_datetime'] = maintanance_finish_datetime
       temp_dict['maintanance_start_date'] = maintanance_start_datetime.date()
-      
-      # print("maintanance_start_datetime", maintanance_start_datetime)
-      
-      
+    
       next_maintanance_datetime = maintanance_start_datetime + timedelta(hours=calendar_interval_between_maint) + timedelta(hours=downtime_planned)
       temp_dict['next_maintanance_datetime'] = next_maintanance_datetime
       days_between_maintanance = next_maintanance_datetime - maintanance_start_datetime
@@ -323,9 +318,14 @@ def maintanance_jobs_df_prepare(calculation_start_mode):
         maintanance_jobs_tr_result_list.append(temp_dict)
     
     maintanance_jobs_tr_df = pd.DataFrame(maintanance_jobs_tr_result_list)
-    maintanance_jobs_tr_df.to_csv('data/maintanance_jobs_tr_df_delete.csv')
+    # конкатинируем получившийся датафрейм в общий
+    maintanance_jobs_df = pd.concat([maintanance_jobs_df, maintanance_jobs_tr_df], ignore_index=True)
+    
+    
+    
+    # maintanance_jobs_tr_df.to_csv('data/maintanance_jobs_tr_df_delete.csv')
     ########################## Конец расчета ТР #########################
-  
+    
     
     
     # режем то, что получилось в период три (десять) года
@@ -333,47 +333,46 @@ def maintanance_jobs_df_prepare(calculation_start_mode):
         maintanance_jobs_df['maintanance_start_datetime'] >= first_day_of_selection]
     maintanance_jobs_df = maintanance_jobs_df.loc[
         maintanance_jobs_df['maintanance_start_datetime'] <= last_day_of_selection]
-    
-    ############# прицепляем eo_model_id #############################
-    eo_model_id_eo_list = full_eo_list.loc[:, ['eo_code', 'eo_model_id', 'eo_model_name', 'level_upper', 'level_1']]
-    maintanance_jobs_df = pd.merge(maintanance_jobs_df, eo_model_id_eo_list, on='eo_code', how='left')
-  
-    maintanance_jobs_df['maintanance_date'] = maintanance_jobs_df['maintanance_start_datetime'].astype(str)
-    maintanance_jobs_df['year'] = maintanance_jobs_df['maintanance_start_datetime'].dt.year
-    maintanance_jobs_df['month'] = maintanance_jobs_df['maintanance_start_datetime'].dt.month
-    maintanance_jobs_df['day'] = maintanance_jobs_df['maintanance_start_datetime'].dt.day
-    maintanance_jobs_df['hour'] = maintanance_jobs_df['maintanance_start_datetime'].dt.hour
-    maintanance_jobs_df['month_year'] = maintanance_jobs_df['month'].astype('str') + "_" + maintanance_jobs_df[
-        'year'].astype('str')
-    sort_index_month_year = initial_values.period_sort_index
-  
-    maintanance_jobs_df['month_year_sort_index'] = maintanance_jobs_df['month_year'].map(sort_index_month_year)
-  
-    level_upper = pd.read_csv('data/level_upper.csv')
-  
-    # джойним с level_upper
-    maintanance_jobs_df = pd.merge(maintanance_jobs_df, level_upper, on='level_upper', how='left')
-    # создаем поле-ключ teh-mesto-month-year
-  
-    maintanance_jobs_df['teh_mesto_month_year'] = maintanance_jobs_df['level_upper'] + '_' + maintanance_jobs_df[
-        'month_year']
-  
-    maintanance_jobs_df['maintanance_jobs_id'] = maintanance_jobs_df['eo_code'].astype(str) + "_" + maintanance_jobs_df[
-        'maintanance_category_id'].astype(str) + "_" + maintanance_jobs_df['maintanance_start_datetime'].astype(str)
-    maintanance_jobs_df.sort_values(by=['maintanance_start_datetime'], ignore_index = True, inplace=True)
-    
     maintanance_jobs_complete_df = pd.concat([maintanance_jobs_complete_df, maintanance_jobs_df])
-  maintanance_jobs_complete_df.sort_values(by=['maintanance_start_datetime'], ignore_index = True, inplace=True)
-  maintanance_jobs_df.to_csv('data/maintanance_jobs_df.csv', index=False)
+    
+  ############# прицепляем eo_model_id #############################
+  eo_model_id_eo_list = full_eo_list.loc[:, ['eo_code', 'eo_model_id', 'eo_model_name', 'level_upper', 'level_1']]
+  maintanance_jobs_complete_df = pd.merge(maintanance_jobs_complete_df, eo_model_id_eo_list, on='eo_code', how='left')
 
-  # print("расчет maintanance_jobs_df завершен")
+  maintanance_jobs_complete_df['maintanance_date'] = maintanance_jobs_complete_df['maintanance_start_datetime'].astype(str)
+  maintanance_jobs_complete_df['year'] = maintanance_jobs_complete_df['maintanance_start_datetime'].dt.year
+
+  maintanance_jobs_complete_df['month'] = maintanance_jobs_complete_df['maintanance_start_datetime'].dt.month
+  maintanance_jobs_complete_df['day'] = maintanance_jobs_complete_df['maintanance_start_datetime'].dt.day
+  maintanance_jobs_complete_df['hour'] = maintanance_jobs_complete_df['maintanance_start_datetime'].dt.hour
+  maintanance_jobs_complete_df['month_year'] = maintanance_jobs_complete_df['month'].astype('str') + "_" + maintanance_jobs_complete_df[
+      'year'].astype('str')
+  sort_index_month_year = initial_values.period_sort_index
+
+  maintanance_jobs_complete_df['month_year_sort_index'] = maintanance_jobs_complete_df['month_year'].map(sort_index_month_year)
+
+  level_upper = pd.read_csv('data/level_upper.csv')
+
+  # джойним с level_upper
+  maintanance_jobs_complete_df = pd.merge(maintanance_jobs_complete_df, level_upper, on='level_upper', how='left')
+  # создаем поле-ключ teh-mesto-month-year
+
+  maintanance_jobs_complete_df['teh_mesto_month_year'] = maintanance_jobs_complete_df['level_upper'] + '_' + maintanance_jobs_complete_df['month_year']
+
+  maintanance_jobs_complete_df['maintanance_jobs_id'] = maintanance_jobs_complete_df['eo_code'].astype(str) + "_" + maintanance_jobs_complete_df['maintanance_category_id'].astype(str) + "_" + maintanance_jobs_complete_df['maintanance_start_datetime'].astype(str)
+  
+  maintanance_jobs_complete_df.sort_values(by=['maintanance_start_datetime'], ignore_index = True, inplace=True)
+    
+  maintanance_jobs_complete_df.to_csv('data/maintanance_jobs_df.csv', index=False)
+
+  print("расчет maintanance_jobs_df завершен")
 
   job_list = ['eto'] + list(set(maintanance_jobs_df['maintanance_category_id']))
   job_list_df = pd.DataFrame(job_list, columns = ['maintanance_category_id'])
   job_list_df.to_csv('data/job_list.csv', index = False)
   
   # заготовка для подсчета количества машин в выборке
-  eo_calculation_table = maintanance_jobs_df.groupby(['eo_code', 'level_1', 'eo_model_id', 'year'], as_index = False)['eo_code'].size()
+  eo_calculation_table = maintanance_jobs_complete_df.groupby(['eo_code', 'level_1', 'eo_model_id', 'year'], as_index = False)['eo_code'].size()
   eo_calculation_table = eo_calculation_table.loc[:, ['eo_code', 'level_1', 'eo_model_id', 'year']]
   eo_calculation_table.to_csv('widget_data/eo_calculation_table.csv', index = False)
 
@@ -381,7 +380,7 @@ def maintanance_jobs_df_prepare(calculation_start_mode):
   """подготовка csv файла для выгрузки в эксель данных о машинах в выборке"""
   # Читаем maintanance_jobs_df()
 
-  maintanance_jobs_dataframe = maintanance_jobs_df
+  maintanance_jobs_dataframe = maintanance_jobs_complete_df
   # извлекаем список ЕО
   eo_list = pd.DataFrame(list(set(maintanance_jobs_dataframe['eo_code'])), columns=['eo_code'])
   # джойним с full_eo_list 
@@ -396,8 +395,8 @@ def maintanance_jobs_df_prepare(calculation_start_mode):
   eo_download_data.to_csv('data/eo_download_data_raw.csv', index = False)
 
   ############### ДАННЫЕ ДЛЯ ПОСТРОЕНИЯ ГРАФИКА ПО ТРУДОЗАТРАТАМ ##############
-  maintanance_jobs_df['man_hours'] = maintanance_jobs_df['man_hours'].astype(float)
-  man_hours_raw_data_df = maintanance_jobs_df.groupby(['level_1', 'eo_code', 'month_year', 'eo_model_id'], as_index = False)['man_hours'].sum()
+  maintanance_jobs_complete_df['man_hours'] = maintanance_jobs_complete_df['man_hours'].astype(float)
+  man_hours_raw_data_df = maintanance_jobs_complete_df.groupby(['level_1', 'eo_code', 'month_year', 'eo_model_id'], as_index = False)['man_hours'].sum()
   man_hours_raw_data_df.to_csv('data/man_hours_raw_data_df.csv', index = False)
 
 
