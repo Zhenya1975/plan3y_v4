@@ -33,7 +33,7 @@ def maintanance_jobs_df_prepare(calculation_start_mode):
   last_maint_date = functions.last_maint_date_func()
   eo_maint_plan = pd.merge(eo_maint_plan_with_dates_with_full_eo_list, last_maint_date, on='eo_maintanance_job_code',
                              how='left')
-  # eo_maint_plan.to_csv('data/eo_maint_plan_delete.csv')
+  eo_maint_plan.to_csv('data/eo_maint_plan_delete.csv')
   # Сначала делаем выборку записей eto
   eo_maint_plan_eto = eo_maint_plan.loc[eo_maint_plan['maintanance_category_id'] == 'eto']
   
@@ -333,4 +333,4 @@ def maintanance_jobs_df_prepare(calculation_start_mode):
 
   
 
-# maintanance_jobs_df_prepare("operation_start_date")
+maintanance_jobs_df_prepare("operation_start_date")

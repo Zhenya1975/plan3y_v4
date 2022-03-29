@@ -10,16 +10,19 @@ last_day_of_selection = initial_values.last_day_of_selection
 
 
 def full_eo_list_actual_func():
-    """чтение full_eo_list_actual"""
-    full_eo_list_actual = pd.read_csv('data/full_eo_list_actual.csv', dtype=str)
-    # level_1_df = pd.read_csv("data/level_1.csv", dtype=str)
-    # full_eo_list_actual = pd.merge(full_eo_list_actual, level_1_df, on = 'level_1', how = 'left')
-    full_eo_list_actual["operation_start_date"] = pd.to_datetime(full_eo_list_actual["operation_start_date"])
-    full_eo_list_actual["operation_finish_date"] = pd.to_datetime(full_eo_list_actual["operation_finish_date"])
-    full_eo_list_actual = full_eo_list_actual.astype({'strategy_id': int, 'avearage_day_operation_hours': float})
+  """чтение full_eo_list_actual"""
+  # full_eo_list_actual = pd.read_csv('data/full_eo_list_actual.csv', dtype=str)
+  full_eo_list_actual = pd.read_csv("https://drive.google.com/uc?export=download&id=1GDB2rVwdquDQlI7qrVAlwwiaK2L86nzw", dtype=str)
+  # print(full_eo_list_actual.info())
+  
+  # level_1_df = pd.read_csv("data/level_1.csv", dtype=str)
+  # full_eo_list_actual = pd.merge(full_eo_list_actual, level_1_df, on = 'level_1', how = 'left')
+  full_eo_list_actual["operation_start_date"] = pd.to_datetime(full_eo_list_actual["operation_start_date"])
+  full_eo_list_actual["operation_finish_date"] = pd.to_datetime(full_eo_list_actual["operation_finish_date"])
+  full_eo_list_actual = full_eo_list_actual.astype({'strategy_id': int, 'avearage_day_operation_hours': float})
 
-    return full_eo_list_actual
-
+  return full_eo_list_actual
+# full_eo_list_actual_func()
 
 def full_eo_list_func():
     """чтение full_eo_list"""
@@ -157,7 +160,7 @@ def select_eo_for_calculation():
   """Выборка ео из полного списка full_eo_list_actual в full_eo_list"""
   maintanance_job_list_general_df = maintanance_job_list_general_func()
   
-  strategy_list = list(set( maintanance_job_list_general_df['strategy_id']))
+  strategy_list = list(set(maintanance_job_list_general_df['strategy_id']))
 
   full_eo_list = full_eo_list_actual_func()
   full_eo_list['strategy_id'] = full_eo_list['strategy_id'].astype(int)
@@ -167,7 +170,7 @@ def select_eo_for_calculation():
   full_eo_list.to_csv('data/full_eo_list.csv', index=False)
   return full_eo_list
   #################
-#select_eo_for_calculation()
+## select_eo_for_calculation()
     
 
 
