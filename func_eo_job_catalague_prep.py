@@ -122,4 +122,4 @@ def eo_job_catologue():
   # eo_maintanance_plan_df_tr.to_csv('data/eo_maintanance_plan_df_delete.csv')
   print("работает файл func_eo_job_catalague_prep.py")
   
-eo_job_catologue()
+# eo_job_catologue()
